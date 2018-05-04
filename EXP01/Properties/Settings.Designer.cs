@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Exp01.Properties
+namespace EXP01.Properties
 {
 
 

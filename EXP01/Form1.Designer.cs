@@ -29,17 +29,19 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.webBrowser2 = new System.Windows.Forms.WebBrowser();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.webBrowser2 = new System.Windows.Forms.WebBrowser();
+            this.webBrowser3 = new System.Windows.Forms.WebBrowser();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(118, 0);
+            this.button1.Location = new System.Drawing.Point(115, 0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -47,30 +49,9 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // webBrowser2
-            // 
-            this.webBrowser2.Location = new System.Drawing.Point(0, 30);
-            this.webBrowser2.Name = "webBrowser2";
-            this.webBrowser2.Size = new System.Drawing.Size(0, 0);
-            this.webBrowser2.TabIndex = 1;
-            // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Location = new System.Drawing.Point(0, 30);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(0, 0);
-            this.webBrowser1.TabIndex = 1;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(12, 1);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(75, 21);
-            this.textBox1.TabIndex = 6;
-            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(224, 0);
+            this.button2.Location = new System.Drawing.Point(218, 0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
@@ -80,7 +61,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(330, 0);
+            this.button3.Location = new System.Drawing.Point(321, 0);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 7;
@@ -90,7 +71,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(436, 0);
+            this.button4.Location = new System.Drawing.Point(424, 0);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 7;
@@ -98,16 +79,56 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Location = new System.Drawing.Point(0, 30);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(0, 0);
+            this.webBrowser1.TabIndex = 1;
+            // 
+            // webBrowser2
+            // 
+            this.webBrowser2.Location = new System.Drawing.Point(0, 30);
+            this.webBrowser2.Name = "webBrowser2";
+            this.webBrowser2.Size = new System.Drawing.Size(0, 0);
+            this.webBrowser2.TabIndex = 1;
+            // 
+            // webBrowser3
+            // 
+            this.webBrowser3.Location = new System.Drawing.Point(0, 30);
+            this.webBrowser3.Name = "webBrowser3";
+            this.webBrowser3.Size = new System.Drawing.Size(0, 0);
+            this.webBrowser3.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 1);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(75, 21);
+            this.textBox1.TabIndex = 6;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(527, 0);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 7;
+            this.button5.Text = "button5";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1225, 623);
+            this.ClientSize = new System.Drawing.Size(1920, 780);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.webBrowser1);
+            this.Controls.Add(this.webBrowser2);
+            this.Controls.Add(this.webBrowser3);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.webBrowser2);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
@@ -119,13 +140,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.WebBrowser webBrowser2;
         private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.WebBrowser webBrowser2;
+        private System.Windows.Forms.WebBrowser webBrowser3;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
     }
 }
 

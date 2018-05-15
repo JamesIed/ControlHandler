@@ -49,12 +49,15 @@ namespace Exp02
         private void button2_Click(object sender, EventArgs e)
         {
             ListView LV = listView1;
+            System.Threading.TimerCallback callback = TimerEvent;
+            timer = new System.Threading.Timer(callback, "", 0, 1000);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            ListView LV = listView1;
             System.Threading.TimerCallback callback = TimerEvent;
-            timer = new System.Threading.Timer(callback, "", 0, 1000);
+            timer = new System.Threading.Timer(callback, "", 0, 10);
         }
 
         public void TimerEvent(Object obj) { this.Invoke(new MethodInvoker( delegate() { Caller();} ) ); }
@@ -63,7 +66,7 @@ namespace Exp02
         {
             ListView LV = listView1;
             LV.BeginUpdate();
-            int Number = RandomStatus.Next(1, LV.Items.Count);
+            int Number = RandomStatus.Next(1, LV.Items.Count) - 1;
             int Numbering = int.Parse(LV.Items[Number].SubItems[0].Text);
             string mName = LV.Items[Number].SubItems[1].Text;
             int mLevel;

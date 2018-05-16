@@ -19,47 +19,33 @@ namespace CadPlotHelper
         [DllImport("user32.dll")]
         static extern int GetWindowText(int hWnd, StringBuilder text, int count);
         [DllImport("user32.dll")]
-        public static extern UIntPtr FindWindow(string lpClassName, string lpWindowName);
+        public static extern int FindWindow(string lpClassName, string lpWindowName);
         [DllImport("user32.dll")]
-        public static extern UIntPtr FindWindowEx(UIntPtr hWnd1, UIntPtr hWnd2, string lpsz1, string lpsz2);
+        public static extern int FindWindowEx(int hWnd1, int hWnd2, string lpsz1, string lpsz2);
         [DllImport("user32.dll")]
-        public static extern UIntPtr SendMessage(UIntPtr hWnd, UIntPtr wMsg, UIntPtr wParam, UIntPtr lParam);
+        public static extern int SendMessage(int hWnd, int wMsg, int wParam, int lParam);
 
         System.Threading.Timer timer;
         public Random RandomStatus = new Random();
 
-        private void button3_Click(object sender, EventArgs e)
+        public void TestHandleGet()
         {
-            ListView LV = listView1;
-            System.Threading.TimerCallback callback = TimerEvent;
-            timer = new System.Threading.Timer(callback, "", 0, 10);
+            int hWndA = FindWindow("AfxMDIFrame140u", null);
+            SendMessage(hWndA, 0, 17, 1900545);
+            SendMessage(hWndA, 0, 80, 1638401);
         }
 
-        public void TimerEvent(Object obj) { this.Invoke(new MethodInvoker(delegate () { Caller(); })); }
-
-        public void Caller()
+        private void button1_Click(object sender, EventArgs e)
         {
             ListView LV = listView1;
             LV.BeginUpdate();
-            int Number = RandomStatus.Next(1, LV.Items.Count) - 1;
-            int Numbering = int.Parse(LV.Items[Number].SubItems[0].Text);
-            string mName = LV.Items[Number].SubItems[1].Text;
-            int mLevel;
-            int mStr = int.Parse(LV.Items[Number].SubItems[3].Text);
-            int mInt = int.Parse(LV.Items[Number].SubItems[4].Text);
-            int mDex = int.Parse(LV.Items[Number].SubItems[5].Text);
-
-            int sUp = RandomStatus.Next(1, 3);
-            mStr += (sUp == 1) ? 1 : 0;
-            mInt += (sUp == 2) ? 1 : 0;
-            mDex += (sUp == 3) ? 1 : 0;
-            mLevel = mStr + mInt + mDex;
-
-            LV.Items.RemoveAt(Number);
-            String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), mStr.ToString(), mInt.ToString(), mDex.ToString() };
-            ListViewItem lvt = new ListViewItem(CharacterSet);
+            int PageNo = LV.Items.Count + 1;
+            TextBox[] TB = { textBox1, textBox2, textBox3, textBox4 };
+            String[] PosSet = { PageNo.ToString(), TB[0].Text, TB[1].Text, TB[2].Text, TB[3].Text };
+            ListViewItem lvt = new ListViewItem(PosSet);
             LV.Items.Add(lvt);
             LV.EndUpdate();
+            TestHandleGet();
         }
 
         public Form1()
@@ -74,5 +60,23 @@ namespace CadPlotHelper
             listView1.Columns.Add("X2", 60);
             listView1.Columns.Add("Y2", 60);
         }
+
+        /*
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ListView LV = listView1;
+            System.Threading.TimerCallback callback = TimerEvent;
+            timer = new System.Threading.Timer(callback, "", 0, 10);
+        }
+
+        public void TimerEvent(Object obj) { this.Invoke(new MethodInvoker(delegate () { Caller(); })); }
+
+        public void Caller()
+        {
+            
+            LV.Items.RemoveAt(Number);
+            LV.EndUpdate();
+        }
+        */
     }
 }

@@ -15,6 +15,7 @@ namespace Exp02
         System.Threading.Timer timer;
         public Random RandomNo = new Random();
         public string[] CharacterSet = { "", "", "", "", "", "", "" };
+        public int ASSA = 0;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -33,37 +34,63 @@ namespace Exp02
 
         private void button2_Click(object sender, EventArgs e)
         {
-            CreateEnemy();
-            System.Threading.TimerCallback callback = TimerEvent;
-            timer = new System.Threading.Timer(callback, "", 0, 100);
+            timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            System.Threading.TimerCallback callback = TimerEvent;
+            timer = new System.Threading.Timer(callback, "", 0, 100);
         }
 
         public void TimerEvent(Object obj) { this.Invoke(new MethodInvoker(delegate () { Caller(); })); }
 
         public void Caller()
         {
-            ListView LV1 = listView1;
-            ListView LV2 = listView2;
-            LV1.BeginUpdate();
-            LV2.BeginUpdate();
-            int result = Battle();
-            LV1.EndUpdate();
-            LV2.EndUpdate();
-            if( result == 0 )
-                timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            ASSA++;
+            if (ASSA == 5)
+            {
+                ListView LV1 = listView1;
+                ListView LV2 = listView2;
+                LV1.BeginUpdate();
+                LV2.BeginUpdate();
+                CreateEnemy();
+                LV2.EndUpdate();
+                LV1.EndUpdate();
+
+                TrapCard();
+                ASSA = 0;
+            }
+        }
+
+        public void TrapCard()
+        {
+            timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
+            int result = 1;
+            do
+            {
+                if (result == 0)
+                    break;
+                result = Battle();
+            } while (result > 0);
+
+            timer.Change(0, 500);
         }
 
         public int Battle()
         {
             ListView LV1 = listView1;
             ListView LV2 = listView2;
+
+            LV1.BeginUpdate();
+            LV2.BeginUpdate();
+
             AlianceTurn();
             EnemyTurn();
+
+            LV2.EndUpdate();
+            LV1.EndUpdate();
             return LV2.Items.Count;
         }
 
@@ -86,8 +113,8 @@ namespace Exp02
                 ListViewItem lvt = new ListViewItem(CharacterSet);
                 LV2.Items.Add(lvt);
             } while (LoopIndex < Warrior);
-            LV1.EndUpdate();
             LV2.EndUpdate();
+            LV1.EndUpdate();
         }
 
         public void AlianceTurn()
@@ -142,8 +169,8 @@ namespace Exp02
                     LV2.Items.RemoveAt(Defender);
 
                 Attacker++;
-                LV1.EndUpdate();
                 LV2.EndUpdate();
+                LV1.EndUpdate();
             } while (Attacker < LV1.Items.Count);
         }
 

@@ -18,21 +18,24 @@ namespace Exp02
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ListView LV1 = listView1;
-            int Numbering = LV1.Items.Count + 1, mLevel = 1, Atk = Roller(), Def = Roller(), HP = Atk * 1 + Def * 10;
-            String mName = Numbering.ToString() + "Char";
-            mLevel = 1;
+            for(int i=1;i<=10;i++)
+            { 
+                ListView LV1 = listView1;
+                int Numbering = LV1.Items.Count + 1, mLevel = 1, Atk = Roller(), Def = Roller(), HP = Atk * 1 + Def * 10;
+                String mName = Numbering.ToString() + "Char";
+                mLevel = 1;
 
-            String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "90" };
-            ListViewItem lvt = new ListViewItem(CharacterSet);
-            LV1.Items.Add(lvt);
+                String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "90" };
+                ListViewItem lvt = new ListViewItem(CharacterSet);
+                LV1.Items.Add(lvt);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             CreateEnemy();
             System.Threading.TimerCallback callback = TimerEvent;
-            timer = new System.Threading.Timer(callback, "", 0, 10);
+            timer = new System.Threading.Timer(callback, "", 0, 100);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -101,13 +104,13 @@ namespace Exp02
                 LV2.BeginUpdate();
                 int Defender = RandomNo.Next(1, LV2.Items.Count) - 1;
 
-                int Numbering1 = int.Parse(LV1.Items[Attacker].SubItems[0].Text);
-                string mName1 = LV1.Items[Attacker].SubItems[1].Text;
-                int mLevel1 = int.Parse(LV1.Items[Attacker].SubItems[2].Text);
-                int Atk1 = int.Parse(LV1.Items[Attacker].SubItems[3].Text);
-                int Def1 = int.Parse(LV1.Items[Attacker].SubItems[4].Text);
-                int HP1 = int.Parse(LV1.Items[Attacker].SubItems[5].Text);
-                int Exp1 = int.Parse(LV1.Items[Attacker].SubItems[6].Text);
+                int Numbering1 = int.Parse(LV1.Items[0].SubItems[0].Text);
+                string mName1 = LV1.Items[0].SubItems[1].Text;
+                int mLevel1 = int.Parse(LV1.Items[0].SubItems[2].Text);
+                int Atk1 = int.Parse(LV1.Items[0].SubItems[3].Text);
+                int Def1 = int.Parse(LV1.Items[0].SubItems[4].Text);
+                int HP1 = int.Parse(LV1.Items[0].SubItems[5].Text);
+                int Exp1 = int.Parse(LV1.Items[0].SubItems[6].Text);
 
                 int Numbering2 = int.Parse(LV2.Items[Defender].SubItems[0].Text);
                 string mName2 = LV2.Items[Defender].SubItems[1].Text;
@@ -119,12 +122,14 @@ namespace Exp02
                 HP2 = (Atk1 > Def2) ? (HP2 - (Atk1 - Def2)) : (HP2 - 1);
                 Exp1 = (HP2 > 0) ? Exp1 : (Exp1 + mLevel2);
                 if (Exp1 >= 100)
-                    LevelUp(Numbering1);
-
-                LV1.Items.RemoveAt(Attacker);
-                String[] CharacterSet = { Numbering1.ToString(), mName1, mLevel1.ToString(), Atk1.ToString(), Def1.ToString(), HP1.ToString(), Exp1.ToString() };
-                ListViewItem lvt = new ListViewItem(CharacterSet);
-                LV1.Items.Add(lvt);
+                    LevelUp();
+                else
+                {
+                    LV1.Items.RemoveAt(0);
+                    String[] CharacterSet = { Numbering1.ToString(), mName1, mLevel1.ToString(), Atk1.ToString(), Def1.ToString(), HP1.ToString(), Exp1.ToString() };
+                    ListViewItem lvt = new ListViewItem(CharacterSet);
+                    LV1.Items.Add(lvt);
+                }
 
                 if(HP2 >0)
                 {
@@ -152,16 +157,15 @@ namespace Exp02
             */
         }
 
-        public void LevelUp(int CharIndex)
+        public void LevelUp()
         {
             ListView LV1 = listView1;
-
-            int Number = CharIndex - 1;
-            int Numbering = int.Parse(LV1.Items[Number].SubItems[0].Text);
-            string mName = LV1.Items[Number].SubItems[1].Text;
-            int mLevel = int.Parse(LV1.Items[Number].SubItems[2].Text);
-            int Atk = int.Parse(LV1.Items[Number].SubItems[3].Text);
-            int Def = int.Parse(LV1.Items[Number].SubItems[4].Text);
+            
+            int Numbering = int.Parse(LV1.Items[0].SubItems[0].Text);
+            string mName = LV1.Items[0].SubItems[1].Text;
+            int mLevel = int.Parse(LV1.Items[0].SubItems[2].Text);
+            int Atk = int.Parse(LV1.Items[0].SubItems[3].Text);
+            int Def = int.Parse(LV1.Items[0].SubItems[4].Text);
             
             mLevel++;
 
@@ -170,7 +174,7 @@ namespace Exp02
             Def += (sUp == 2) ? 1 : 0;
             int HP = Atk + Def * 10;
 
-            LV1.Items.RemoveAt(Number);
+            LV1.Items.RemoveAt(0);
             String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "0" };
             ListViewItem lvt = new ListViewItem(CharacterSet);
             LV1.Items.Add(lvt);

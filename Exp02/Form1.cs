@@ -12,21 +12,21 @@ namespace Exp02
 {
     public partial class Form1 : Form
     {
-        System.Threading.Timer timer;
+        public System.Threading.Timer timer;
         public Random RandomNo = new Random();
         public string[] CharacterSet = { "", "", "", "", "", "", "" };
-        public int ASSA = 0;
+        public int minLvl = 0, MaxLvl = 0;
+        public SortOrder Sorting { get; set; }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            for(int i=1;i<=10;i++)
+            for(int i = 1;i <= 10; i++)
             { 
                 ListView LV1 = listView1;
-                int Numbering = LV1.Items.Count + 1, mLevel = 1, Atk = Roller(), Def = Roller(), HP = Atk * 1 + Def * 10;
+                int Numbering = LV1.Items.Count + 1, mLevel = 0, Atk = 10, Def = 10, HP = Atk / 10 + Def;
                 String mName = Numbering.ToString() + "Char";
-                mLevel = 1;
 
-                String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "90" };
+                String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "0" };
                 ListViewItem lvt = new ListViewItem(CharacterSet);
                 LV1.Items.Add(lvt);
             }
@@ -34,179 +34,131 @@ namespace Exp02
 
         private void button2_Click(object sender, EventArgs e)
         {
-            timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+            Battle();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            System.Threading.TimerCallback callback = TimerEvent;
-            timer = new System.Threading.Timer(callback, "", 0, 100);
+            timer.Dispose();
         }
 
         public void TimerEvent(Object obj) { this.Invoke(new MethodInvoker(delegate () { Caller(); })); }
 
+        public void Battle()
+        {
+            ListView LV1 = listView1;
+            ListView LV2 = listView2;
+            int Enemy = LV2.Items.Count;
+            if (Enemy == 0)
+            {
+                int Warrior = RandomNo.Next(LV1.Items.Count / 2, LV1.Items.Count * 2);
+                for(int i = 1; i < Warrior; i++)
+                {
+                    int Numbering = LV2.Items.Count + 1, mLevel, Atk = 9, Def = 9, HP;
+                    String mName = "Enemy " + Numbering.ToString();
+                    mLevel = (MaxLvl == 0 || minLvl == 0) ? 1 : RandomNo.Next(minLvl * 8 / 10, MaxLvl * 12 / 10);
+
+                    for(int j = 1; j <= mLevel; j++)
+                    {
+                        int sUp = RandomNo.Next(1, 100);
+                        Atk += (sUp <= 55) ? 1 : 0;
+                        Def += (sUp >= 45) ? 1 : 0;
+                    }
+
+                    HP = (Atk + Def * 10) / 10;
+
+                    String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "0" };
+                    ListViewItem lvt = new ListViewItem(CharacterSet);
+                    LV2.Items.Add(lvt);
+                }
+                // LV1.Sorting = SortOrder.Ascending;
+            }
+
+            System.Threading.TimerCallback callback = TimerEvent;
+            timer = new System.Threading.Timer(callback, "", 0, 1000);
+        }
+
         public void Caller()
         {
-            ASSA++;
-            if (ASSA == 5)
-            {
-                ListView LV1 = listView1;
-                ListView LV2 = listView2;
-                LV1.BeginUpdate();
-                LV2.BeginUpdate();
-                CreateEnemy();
-                LV2.EndUpdate();
-                LV1.EndUpdate();
-
-                TrapCard();
-                ASSA = 0;
-            }
-        }
-
-        public void TrapCard()
-        {
-            timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-
-            int result = 1;
-            do
-            {
-                if (result == 0)
-                    break;
-                result = Battle();
-            } while (result > 0);
-
-            timer.Change(0, 500);
-        }
-
-        public int Battle()
-        {
             ListView LV1 = listView1;
             ListView LV2 = listView2;
-
+            int Battlechecker = 0;
             LV1.BeginUpdate();
             LV2.BeginUpdate();
-
-            AlianceTurn();
-            EnemyTurn();
-
-            LV2.EndUpdate();
-            LV1.EndUpdate();
-            return LV2.Items.Count;
-        }
-
-        public void CreateEnemy()
-        {
-            ListView LV1 = listView1;
-            ListView LV2 = listView2;
-            LV1.BeginUpdate();
-            LV2.BeginUpdate();
-            int Warrior = RandomNo.Next(1, LV1.Items.Count);
-            int LoopIndex = 0;
-            do
+            
+            if (Battlechecker == 0)
             {
-                LoopIndex++;
-                int Numbering = LV2.Items.Count + 1, mLevel = 1, Atk = Roller(), Def = Roller(), HP = Atk + Def * 10;
-                String mName = "Enemy " + Numbering.ToString();
-                mLevel = 1;
-
-                String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "0" };
-                ListViewItem lvt = new ListViewItem(CharacterSet);
-                LV2.Items.Add(lvt);
-            } while (LoopIndex < Warrior);
-            LV2.EndUpdate();
-            LV1.EndUpdate();
-        }
-
-        public void AlianceTurn()
-        {
-            ListView LV1 = listView1;
-            ListView LV2 = listView2;
-            int Attacker=0;
-            do
-            {
-                if (LV2.Items.Count == 0)
-                    break;
-
-                LV1.BeginUpdate();
-                LV2.BeginUpdate();
-                int Defender = RandomNo.Next(1, LV2.Items.Count) - 1;
-
-                int Numbering1 = int.Parse(LV1.Items[0].SubItems[0].Text);
-                string mName1 = LV1.Items[0].SubItems[1].Text;
-                int mLevel1 = int.Parse(LV1.Items[0].SubItems[2].Text);
-                int Atk1 = int.Parse(LV1.Items[0].SubItems[3].Text);
-                int Def1 = int.Parse(LV1.Items[0].SubItems[4].Text);
-                int HP1 = int.Parse(LV1.Items[0].SubItems[5].Text);
-                int Exp1 = int.Parse(LV1.Items[0].SubItems[6].Text);
-
-                int Numbering2 = int.Parse(LV2.Items[Defender].SubItems[0].Text);
-                string mName2 = LV2.Items[Defender].SubItems[1].Text;
-                int mLevel2 = int.Parse(LV2.Items[Defender].SubItems[2].Text);
-                int Atk2 = int.Parse(LV2.Items[Defender].SubItems[3].Text);
-                int Def2 = int.Parse(LV2.Items[Defender].SubItems[4].Text);
-                int HP2 = int.Parse(LV2.Items[Defender].SubItems[5].Text);
-
-                HP2 = (Atk1 > Def2) ? (HP2 - (Atk1 - Def2)) : (HP2 - 1);
-                Exp1 = (HP2 > 0) ? Exp1 : (Exp1 + mLevel2);
-                if (Exp1 >= 100)
-                    LevelUp();
-                else
+                Battlechecker++;
+                if (LV2.Items.Count != 0)
                 {
+                    int Defender = RandomNo.Next(1, LV2.Items.Count) - 1;
+
+                    int Numbering1 = int.Parse(LV1.Items[0].SubItems[0].Text);
+                    string mName1 = LV1.Items[0].SubItems[1].Text;
+                    int mLevel1 = int.Parse(LV1.Items[0].SubItems[2].Text);
+                    int Atk1 = int.Parse(LV1.Items[0].SubItems[3].Text);
+                    int Def1 = int.Parse(LV1.Items[0].SubItems[4].Text);
+                    int HP1 = int.Parse(LV1.Items[0].SubItems[5].Text);
+                    int Exp1 = int.Parse(LV1.Items[0].SubItems[6].Text);
+
+                    int Numbering2 = int.Parse(LV2.Items[Defender].SubItems[0].Text);
+                    string mName2 = LV2.Items[Defender].SubItems[1].Text;
+                    int mLevel2 = int.Parse(LV2.Items[Defender].SubItems[2].Text);
+                    int Atk2 = int.Parse(LV2.Items[Defender].SubItems[3].Text);
+                    int Def2 = int.Parse(LV2.Items[Defender].SubItems[4].Text);
+                    int HP2 = int.Parse(LV2.Items[Defender].SubItems[5].Text);
+
+                    HP2 = (Atk1 > Def2) ? (HP2 - (Atk1 - Def2)) : (HP2 - 1);
+                    Exp1 = (HP2 > 0) ? Exp1 : (Exp1 + Def2 + Atk2 / 10);
+
+                    if (Exp1 >= mLevel1 * 100)
+                    {
+                        mLevel1++;
+                        int sUp = RandomNo.Next(1, 100);
+                        Atk1 += (sUp <= 55) ? 1 : 0;
+                        Def1 += (sUp >= 45) ? 1 : 0;
+                        HP1 = (Atk1 + Def1 * 10) / 10;
+                        Exp1 = 0;
+                    }
+
                     LV1.Items.RemoveAt(0);
                     String[] CharacterSet = { Numbering1.ToString(), mName1, mLevel1.ToString(), Atk1.ToString(), Def1.ToString(), HP1.ToString(), Exp1.ToString() };
                     ListViewItem lvt = new ListViewItem(CharacterSet);
                     LV1.Items.Add(lvt);
-                }
 
-                if(HP2 >0)
+                    if (HP2 > 0)
+                    {
+                        LV2.Items.RemoveAt(Defender);
+                        String[] CharacterSet2 = { Numbering2.ToString(), mName2, mLevel1.ToString(), Atk2.ToString(), Def2.ToString(), HP2.ToString() };
+                        ListViewItem lvt2 = new ListViewItem(CharacterSet2);
+                        LV2.Items.Add(lvt2);
+                    }
+                    else
+                        LV2.Items.RemoveAt(Defender);
+
+                    minLvl = (minLvl <= mLevel1) ? mLevel1 : minLvl;
+                    MaxLvl = (MaxLvl >= mLevel1) ? mLevel1 : MaxLvl;
+                }
+            }
+            else
+            {
+                Battlechecker--;
+                if (LV1.Items.Count != 0)
                 {
-                    LV2.Items.RemoveAt(Defender);
-                    String[] CharacterSet2 = { Numbering2.ToString(), mName2, mLevel1.ToString(), Atk2.ToString(), Def2.ToString(), HP2.ToString() };
-                    ListViewItem lvt2 = new ListViewItem(CharacterSet2);
-                    LV2.Items.Add(lvt2);
+
                 }
-                else
-                    LV2.Items.RemoveAt(Defender);
+            }
+            LV2.EndUpdate();
+            LV1.EndUpdate();
 
-                Attacker++;
-                LV2.EndUpdate();
-                LV1.EndUpdate();
-            } while (Attacker < LV1.Items.Count);
+            if(LV1.Items.Count == 0 || LV2.Items.Count == 0)
+            {
+                timer.Dispose();
+                //timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                Battle();
+            }
         }
-
-        public void EnemyTurn()
-        {
-            /*
-            ListView LV1 = listView1;
-            ListView LV2 = listView2;
-            int Defender = RandomNo.Next(1, LV1.Items.Count);
-            int Attacker = RandomNo.Next(1, LV2.Items.Count);
-            */
-        }
-
-        public void LevelUp()
-        {
-            ListView LV1 = listView1;
-            
-            int Numbering = int.Parse(LV1.Items[0].SubItems[0].Text);
-            string mName = LV1.Items[0].SubItems[1].Text;
-            int mLevel = int.Parse(LV1.Items[0].SubItems[2].Text);
-            int Atk = int.Parse(LV1.Items[0].SubItems[3].Text);
-            int Def = int.Parse(LV1.Items[0].SubItems[4].Text);
-            
-            mLevel++;
-
-            int sUp = RandomNo.Next(1, 2);
-            Atk += (sUp == 1) ? 1 : 0;
-            Def += (sUp == 2) ? 1 : 0;
-            int HP = Atk + Def * 10;
-
-            LV1.Items.RemoveAt(0);
-            String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "0" };
-            ListViewItem lvt = new ListViewItem(CharacterSet);
-            LV1.Items.Add(lvt);
-        }
-
+        
         public int Roller(int a = 3, int b = 6)
         {
             int Result = 0;

@@ -167,21 +167,21 @@ namespace Exp02
             listView1.View = View.Details;
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
-            listView1.Columns.Add("No", 30);
-            listView1.Columns.Add("Name", 100);
-            listView1.Columns.Add("Level", 60);
-            listView1.Columns.Add("Atk", 40);
-            listView1.Columns.Add("Def", 40);
-            listView1.Columns.Add("HP", 40);
-            listView1.Columns.Add("Exp", 40);
+            listView1.Columns.Add("No", -2, HorizontalAlignment.Center);
+            listView1.Columns.Add("Name", -2, HorizontalAlignment.Center);
+            listView1.Columns.Add("Level", -2, HorizontalAlignment.Center);
+            listView1.Columns.Add("Atk", -2, HorizontalAlignment.Center);
+            listView1.Columns.Add("Def", -2, HorizontalAlignment.Center);
+            listView1.Columns.Add("HP", -2, HorizontalAlignment.Center);
+            listView1.Columns.Add("Exp", -2, HorizontalAlignment.Center);
             listView2.View = View.Details;
             listView2.FullRowSelect = true;
             listView2.GridLines = true;
-            listView2.Columns.Add("No", 30);
-            listView2.Columns.Add("Name", 100);
-            listView2.Columns.Add("Atk", 40);
-            listView2.Columns.Add("Def", 40);
-            listView2.Columns.Add("HP", 40);
+            listView2.Columns.Add("No", -2, HorizontalAlignment.Center);
+            listView2.Columns.Add("Name", -2, HorizontalAlignment.Center);
+            listView2.Columns.Add("Atk", -2, HorizontalAlignment.Center);
+            listView2.Columns.Add("Def", -2, HorizontalAlignment.Center);
+            listView2.Columns.Add("HP", -2, HorizontalAlignment.Center);
         }
     }
 }

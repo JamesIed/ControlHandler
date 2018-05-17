@@ -38,21 +38,23 @@ namespace AutoAbscent
         
         private void button1_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("http://imart.inven.co.kr/attendance/");
+            webBrowser1.Navigate("http://2tcafe.com/attendance/attendance.php?3");
 
             ready();
 
             HtmlDocument HD = webBrowser1.Document;
-            HtmlElement ID = HD.GetElementById("user_ID");
-            HtmlElement PW = HD.GetElementById("password");
-            HtmlElement F1 = HD.GetElementById("loginbutton");
 
             ready();
-
+            HD.GetElementById("mb_id").SetAttribute("value", "plmdml");
+            HD.GetElementById("mb_password").InnerText = "7367";
+            //HD.GetElementById("login-button");
+            webBrowser1.Document.InvokeScript("login-button");
+            /*
             ID.SetAttribute("value", "plmdml");
             PW.SetAttribute("value", "ied4inven!");
             F1.InvokeMember("submit");
-
+            */
+            ready();
 
         }
         
@@ -62,9 +64,9 @@ namespace AutoAbscent
 
             ready();
 
-            webBrowser1.Document.GetElementById("user_id").InnerText = "ied8911@gmail.com";
-            webBrowser1.Document.GetElementById("password").InnerText = "ied44nexon!";
-            webBrowser1.Document.InvokeScript("NexonLogin");
+            webBrowser1.Document.GetElementById("user_id").InnerText = "plmdml";
+            webBrowser1.Document.GetElementById("password").InnerText = "qwe123";
+            webBrowser1.Document.GetElementById("GPE_login").InvokeMember("submit");
         }
         
 

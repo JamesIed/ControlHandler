@@ -15,7 +15,7 @@ namespace Exp02
         public System.Threading.Timer timer;
         public Random RandomNo = new Random();
         public string[] CharacterSet = { "", "", "", "", "", "", "" };
-        public int minLvl = 0, MaxLvl = 0;
+        public int MaxAtk = 10, MaxDef = 10;
         public SortOrder Sorting { get; set; }
 
         private void button1_Click(object sender, EventArgs e)
@@ -54,20 +54,10 @@ namespace Exp02
                 int Warrior = RandomNo.Next(LV1.Items.Count / 2, LV1.Items.Count * 2);
                 for(int i = 1; i < Warrior; i++)
                 {
-                    int Numbering = LV2.Items.Count + 1, mLevel, Atk = 9, Def = 9, HP;
+                    int Numbering = LV2.Items.Count + 1, Atk = RandomNo.Next(8, MaxAtk * 15 / 10), Def = RandomNo.Next(8, MaxDef * 15 / 10), HP = Atk / 10 + Def;
                     String mName = "Enemy " + Numbering.ToString();
-                    mLevel = (MaxLvl == 0 || minLvl == 0) ? 1 : RandomNo.Next(minLvl * 8 / 10, MaxLvl * 12 / 10);
-
-                    for(int j = 1; j <= mLevel; j++)
-                    {
-                        int sUp = RandomNo.Next(1, 100);
-                        Atk += (sUp <= 55) ? 1 : 0;
-                        Def += (sUp >= 45) ? 1 : 0;
-                    }
-
-                    HP = (Atk + Def * 10) / 10;
-
-                    String[] CharacterSet = { Numbering.ToString(), mName, mLevel.ToString(), Atk.ToString(), Def.ToString(), HP.ToString(), "0" };
+                    
+                    String[] CharacterSet = { Numbering.ToString(), mName, Atk.ToString(), Def.ToString(), HP.ToString(), "0", "0" };
                     ListViewItem lvt = new ListViewItem(CharacterSet);
                     LV2.Items.Add(lvt);
                 }
@@ -75,7 +65,7 @@ namespace Exp02
             }
 
             System.Threading.TimerCallback callback = TimerEvent;
-            timer = new System.Threading.Timer(callback, "", 0, 1000);
+            timer = new System.Threading.Timer(callback, "", 0, 1);
         }
 
         public void Caller()
@@ -103,10 +93,9 @@ namespace Exp02
 
                     int Numbering2 = int.Parse(LV2.Items[Defender].SubItems[0].Text);
                     string mName2 = LV2.Items[Defender].SubItems[1].Text;
-                    int mLevel2 = int.Parse(LV2.Items[Defender].SubItems[2].Text);
-                    int Atk2 = int.Parse(LV2.Items[Defender].SubItems[3].Text);
-                    int Def2 = int.Parse(LV2.Items[Defender].SubItems[4].Text);
-                    int HP2 = int.Parse(LV2.Items[Defender].SubItems[5].Text);
+                    int Atk2 = int.Parse(LV2.Items[Defender].SubItems[2].Text);
+                    int Def2 = int.Parse(LV2.Items[Defender].SubItems[3].Text);
+                    int HP2 = int.Parse(LV2.Items[Defender].SubItems[4].Text);
 
                     HP2 = (Atk1 > Def2) ? (HP2 - (Atk1 - Def2)) : (HP2 - 1);
                     Exp1 = (HP2 > 0) ? Exp1 : (Exp1 + Def2 + Atk2 / 10);
@@ -129,15 +118,15 @@ namespace Exp02
                     if (HP2 > 0)
                     {
                         LV2.Items.RemoveAt(Defender);
-                        String[] CharacterSet2 = { Numbering2.ToString(), mName2, mLevel1.ToString(), Atk2.ToString(), Def2.ToString(), HP2.ToString() };
+                        String[] CharacterSet2 = { Numbering2.ToString(), mName2, Atk2.ToString(), Def2.ToString(), HP2.ToString() };
                         ListViewItem lvt2 = new ListViewItem(CharacterSet2);
                         LV2.Items.Add(lvt2);
                     }
                     else
                         LV2.Items.RemoveAt(Defender);
-
-                    minLvl = (minLvl <= mLevel1) ? mLevel1 : minLvl;
-                    MaxLvl = (MaxLvl >= mLevel1) ? mLevel1 : MaxLvl;
+                    
+                    MaxDef = (MaxDef <= Def1) ? Def1 : MaxDef;
+                    MaxAtk = (MaxAtk <= Atk1) ? Atk1 : MaxAtk;
                 }
             }
             else
@@ -155,7 +144,7 @@ namespace Exp02
             {
                 timer.Dispose();
                 //timer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                Battle();
+                //Battle();
             }
         }
         
@@ -190,7 +179,6 @@ namespace Exp02
             listView2.GridLines = true;
             listView2.Columns.Add("No", 30);
             listView2.Columns.Add("Name", 100);
-            listView2.Columns.Add("Level", 60);
             listView2.Columns.Add("Atk", 40);
             listView2.Columns.Add("Def", 40);
             listView2.Columns.Add("HP", 40);

@@ -45,15 +45,17 @@ namespace AutoAbscent
             HtmlDocument HD = webBrowser1.Document;
 
             ready();
-            HD.GetElementById("mb_id").SetAttribute("value", "plmdml");
+            HD.GetElementById("mb_id").InnerText = "plmdml";
             HD.GetElementById("mb_password").InnerText = "7367";
-            //HD.GetElementById("login-button");
-            webBrowser1.Document.InvokeScript("login-button");
-            /*
-            ID.SetAttribute("value", "plmdml");
-            PW.SetAttribute("value", "ied4inven!");
-            F1.InvokeMember("submit");
-            */
+
+            HtmlElementCollection element = HD.GetElementsByTagName("input");
+            for (int i = 0; i < element.Count; i++)
+            {
+                if (element[i].GetAttribute("Class") == "login-button")
+                {
+                    element[i].InvokeMember("click");
+                }
+            }
             ready();
 
         }
@@ -64,11 +66,54 @@ namespace AutoAbscent
 
             ready();
 
-            webBrowser1.Document.GetElementById("user_id").InnerText = "plmdml";
-            webBrowser1.Document.GetElementById("password").InnerText = "qwe123";
-            webBrowser1.Document.GetElementById("GPE_login").InvokeMember("submit");
+            HtmlDocument HD = webBrowser1.Document;
+
+            HD.GetElementById("user_id").InnerText = "plmdml";
+            HD.GetElementById("password").InnerText = "qwe123";
+
+            var element = webBrowser1.Document.All;
+            //HtmlElementCollection element = HD.GetElementsByTagName("input");
+            HD.GetType();
+            for (int i = 0; i < element.Count; i++)
+            {
+                if (element[i].GetType() == "로그인")
+                {
+                    element[i].InvokeMember("click");
+                }
+            }
+
+            ready();
         }
-        
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("http://imart.inven.co.kr/attendance/");
+
+            ready();
+
+            HtmlDocument HD = webBrowser1.Document;
+
+            HD.GetElementById("comLeftLoginId").InnerText = "plmdml";
+            HD.GetElementById("comLoginPassword").InnerText = "ied4inven!";
+            HD.GetElementById("comLeftLoginForm").InvokeMember("SUBMIT");
+
+            ready();
+
+            HD.GetElementById("invenAttendCheck").InvokeMember("attendBttn");
+            /*
+            HtmlElementCollection element = HD.GetElementsByTagName("attendBttn");
+            for (int i = 0; i < element.Count; i++)
+            {
+                if (element[i].GetAttribute("value") == "로그인")
+                {
+                    element[i].InvokeMember("click");
+                }
+            }
+            HD.Body.All["attendBttn"].InvokeMember("click");
+            //HD.InvokeScript("JavaScriptFunctionWithoutParameters");
+            */
+        }
+
 
         public void ready()
         {
@@ -81,11 +126,6 @@ namespace AutoAbscent
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

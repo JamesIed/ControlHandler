@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
 using System.Runtime.InteropServices;
+using System.Collections;
 
 namespace AutoAbscent
 {
@@ -35,7 +36,7 @@ namespace AutoAbscent
         {
             InternetSetOption(IntPtr.Zero, INTERNET_OPTION_END_BROWSER_SESSION, IntPtr.Zero, 0);
         }
-        
+
         private void button1_Click(object sender, EventArgs e)
         {
             webBrowser1.Navigate("http://2tcafe.com/attendance/attendance.php?3");
@@ -44,20 +45,51 @@ namespace AutoAbscent
 
             HtmlDocument HD = webBrowser1.Document;
 
+            HtmlElementCollection element = webBrowser1.Document.All;
+            listView1.BeginUpdate();
+            for (int i = 0; i < element.Count; i++)
+            {
+                string TempValue = "", TmepID = "";
+
+                if (element[i].GetAttribute("value") != null)
+                    TempValue = element[i].GetAttribute("value");
+                
+                if (element[i].GetAttribute("id") != null)
+                    TmepID = element[i].GetAttribute("ID");
+
+                String[] CharacterSet = { TmepID, TempValue, i.ToString() };
+                ListViewItem lvt = new ListViewItem(CharacterSet);
+                listView1.Items.Add(lvt);
+            }
+            listView1.EndUpdate();
+            /*
+            listView1.Sorting = SortOrder.Descending;
+            listView1.ListViewItemSorter = null;
+
+            */
+
             ready();
+            /*
             HD.GetElementById("mb_id").InnerText = "plmdml";
             HD.GetElementById("mb_password").InnerText = "7367";
-
+            
+            HD.GetElementById("mb_id").SetAttribute("value", "plmdml");
+            HD.GetElementById("mb_password").SetAttribute("value", "7367");
+            HD.GetElementById("flogins").InvokeMember("SUBMIT");
+            */
+            ready();
+            /*
             HtmlElementCollection element = HD.GetElementsByTagName("input");
             for (int i = 0; i < element.Count; i++)
             {
                 if (element[i].GetAttribute("Class") == "login-button")
                 {
                     element[i].InvokeMember("click");
+                    listView1.Items.Add("List item text", 3);
                 }
             }
             ready();
-
+            */
         }
         
         private void button2_Click(object sender, EventArgs e)
@@ -70,7 +102,7 @@ namespace AutoAbscent
 
             HD.GetElementById("user_id").InnerText = "plmdml";
             HD.GetElementById("password").InnerText = "qwe123";
-
+            /*
             var element = webBrowser1.Document.All;
             //HtmlElementCollection element = HD.GetElementsByTagName("input");
             HD.GetType();
@@ -81,7 +113,7 @@ namespace AutoAbscent
                     element[i].InvokeMember("click");
                 }
             }
-
+            */
             ready();
         }
 
@@ -99,7 +131,22 @@ namespace AutoAbscent
 
             ready();
 
-            HD.GetElementById("invenAttendCheck").InvokeMember("attendBttn");
+            String ThisUrl= webBrowser1.Url.ToString();
+
+            if(ThisUrl == "http://imart.inven.co.kr/attendance/")
+            {
+                HD.InvokeScript("JavaScriptFunctionWithoutParameters");
+                webBrowser1.Document.InvokeScript("function", new object[] {"a" });
+                
+            }/*
+            else if(ThisUrl == base)
+            {
+                HD.GetElementById("btn-ok").InvokeMember("Click");
+            }
+            */
+            ready();
+            
+            
             /*
             HtmlElementCollection element = HD.GetElementsByTagName("attendBttn");
             for (int i = 0; i < element.Count; i++)
@@ -122,10 +169,21 @@ namespace AutoAbscent
                 Application.DoEvents();
             }
         }
+        
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listView1.Sorting == SortOrder.Ascending)
+                listView1.Sorting = SortOrder.Descending;
+            else
+                listView1.Sorting = SortOrder.Ascending;
+        }
 
         public Form1()
         {
             InitializeComponent();
+            listView1.View = View.Details;
+            listView1.FullRowSelect = true;
+            listView1.GridLines = true;
         }
     }
 }
